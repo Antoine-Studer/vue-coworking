@@ -3,7 +3,7 @@
     <CowHeader/>
     <CowInfos/>
     <CowFooter/>
-
+    <CowWorkspace/>
   </div>
 </template>
 
@@ -12,9 +12,10 @@
 import CowHeader from './components/CowHeader.vue'
 import CowFooter from './components/CowFooter.vue'
 import CowInfos from './components/CowInfos.vue'
+import CowWorkspace from './components/CowWorkspace.vue'
 export default {
   name: 'App',
-  components: { CowHeader, CowFooter, CowInfos }
+  components: { CowHeader, CowFooter, CowInfos, CowWorkspace }
 }
 </script>
 
