@@ -2,8 +2,8 @@
   <div id="vue-cow">
     <CowHeader/>
     <CowInfos/>
+    <CowBuildings/>
     <CowFooter/>
-    <CowWorkspace/>
   </div>
 </template>
 
@@ -12,10 +12,10 @@
 import CowHeader from './components/CowHeader.vue'
 import CowFooter from './components/CowFooter.vue'
 import CowInfos from './components/CowInfos.vue'
-import CowWorkspace from './components/CowWorkspace.vue'
+import CowBuildings from './components/CowBuildings.vue'
 export default {
   name: 'App',
-  components: { CowHeader, CowFooter, CowInfos, CowWorkspace }
+  components: { CowHeader, CowFooter, CowInfos, CowBuildings }
 }
 </script>
 
