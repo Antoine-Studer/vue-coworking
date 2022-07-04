@@ -16,7 +16,7 @@ const app = simplicite.session(cfg);
 app.info('Version: ' + simplicite.constants.MODULE_VERSION);
 app.debug(app.parameters);
 
-app.login({ username: 'designer', password: 'Bonjour2003' }).then(user => {
+app.login({ username: 'userVue', password: 'userVue0' }).then(user => {
     app.debug('Logged in as ' + user.login);
 
     const vueApp = createApp(Cow);
