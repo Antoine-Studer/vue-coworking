@@ -10,13 +10,13 @@ import Cow from './Cow.vue';
 import simplicite from 'simplicite';
 
 // Explicit URL needed for a standalone deployment, set it to undefined when deploying in Simplicité
-const cfg = { url: 'https://ressources.demo.simplicite.io', debug: false };
+const cfg = { url: 'https://resources.demo.simplicite.io', debug: false };
 const app = simplicite.session(cfg);
 
 app.info('Version: ' + simplicite.constants.MODULE_VERSION);
 app.debug(app.parameters);
 
-app.login({ username: 'userVue', password: 'userVue0' }).then(user => {
+app.login({ username: 'designer', password: 'Bonjour2003' }).then(user => {
     app.debug('Logged in as ' + user.login);
 
     const vueApp = createApp(Cow);
