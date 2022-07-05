@@ -1,5 +1,6 @@
 <template>
     <div id="infos">
+        <p>This is a demo of a coworking space's gestion.</p>
         <button id="bouton_mes_infos" v-on:click="openInfos()">My informations</button>
     </div>
 </template>
@@ -50,13 +51,22 @@ export default {
 
             }
 
+            let delDivs = function(div_profil) {
+                try {
+                    let test_div_reg = document.getElementById("div_inputs");
+                    div_profil.removeChild(test_div_reg);
+                } catch(e) {
+                    try {
+                        let test_div_log = document.getElementById("div_log_in");
+                        div_profil.removeChild(test_div_log);
+                    } catch(e) {
+                        null;
+                    }
+                }
+            }
 
             let logIn = async function(vm, div_profil) {
-                let test_div_reg = document.getElementById("div_inputs");
-                if (test_div_reg!= undefined) {
-                    div_profil.removeChild(test_div_reg);
-                }
-                
+                delDivs(div_profil);
                 let div_log_in = Object.assign(document.createElement("div"), {id:"div_log_in"});
                 let input_fname = Object.assign(document.createElement("input"), {classList: "infos-customer", type:"text", placeholder:"first name"});
                 let input_lname = Object.assign(document.createElement("input"), {classList: "infos-customer", type:"text", placeholder:"last name"});
@@ -79,10 +89,7 @@ export default {
             }
 
             let enterInfos = function(vm, div_profil) {
-                let test_div_log = document.getElementById("div_log_in");
-                if (test_div_log!= undefined) {
-                    div_profil.removeChild(test_div_log);
-                }
+                delDivs(div_profil);
                 let input_fname = Object.assign(document.createElement("input"), {classList: "infos-customer", type:"text", placeholder:"first name"});
                 let input_lname = Object.assign(document.createElement("input"), {classList: "infos-customer", type:"text", placeholder:"last name"});
                 let input_password = Object.assign(document.createElement("input"), {classList: "input-customer", type:"password", placeholder:"password"})

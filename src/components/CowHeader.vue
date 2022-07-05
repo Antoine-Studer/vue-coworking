@@ -1,7 +1,8 @@
 <template>
     <header>
         <h1>Coworking Space</h1>
-    </header>
+        
+    </header>   
 </template>
 
 <style>

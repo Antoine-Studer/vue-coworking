@@ -9,11 +9,11 @@
                 <div v-bind:id="'div-building-' + building.row_id">
                     <h3>{{building.cowBuiName}}</h3>
                     <p>{{building.cowBuiAdress}}</p>
-                    <p>Opening Time: {{building.cowBuiOpeningTime}}</p>
-                    <p>Closing Time: {{building.cowBuiClosingTime}}</p>
+                    <p>Opening Time: <time>{{building.cowBuiOpeningTime}}</time></p>
+                    <p>Closing Time: <time>{{building.cowBuiClosingTime}}</time></p>
                     <div classList="type">
-                        <p>public: </p><p v-if="building.public  == undefined">0</p><p v-else>{{building.public.length}}</p>
-                        <p>private: </p><p v-if="building.private == undefined">0</p><p v-else>{{building.private.length}}</p>
+                        <p v-if="building.public  == undefined">No public seats available</p><p v-else> public seats available: {{building.public.length}}</p>
+                        <p v-if="building.private  == undefined">No private seats available</p><p v-else>private seats available: {{building.private.length}} </p>
                     </div>
 
                     <button v-on:click="focusBuilding(building.row_id)">Look</button>
@@ -52,19 +52,32 @@ export default {
             vm.workspace = await vm.$simplicite.getBusinessObject("CowWorkspace").search({cowWorBuiId: row_id});
             for (var i=0; i<vm.workspace.length; i++) {
                 let workspace = Object.assign(document.createElement('div'), {classList:"workspace"});
-                let num_workspace = Object.assign(document.createElement("p"), {innerText:vm.workspace[i].cowWorSeatNumber});
+                let num_workspace = Object.assign(document.createElement("p"), {innerText:vm.workspace[i].cowWorSeatNumber + " : " + vm.workspace[i].cowWorStatus});
                 workspace.appendChild(num_workspace);
                 div_workspace.appendChild(workspace)
             }
             div_bui.appendChild(div_workspace);
         },
-        searchBuilding() {
-            
+        async searchBuilding() {
+            const vm = this;
+            let ul_bui = document.getElementById("liste_buildings");
+            let l_buildings = document.getElementsByClassName("building");
+            let input = document.getElementById("search");
+            for(let building of l_buildings) {
+                ul_bui.removeChild(building);
+            }
+            vm.buildings = await vm.$simplicite.getBusinessObject("CowBuilding").search();
+
+            for (var j = 0; j<vm.buildings.length; j++) {
+                if (((vm.buildings[j].cowBuiName).substring(0,input.value.length)).toLowerCase() == input.value.toLowerCase()) {
+                    let bui = Object.assign(document.createElement("li"), {classList:"building"});
+                    let bui_name = Object.assign(document.createElement("h3"), {innerText:vm.buildings[j].cowBuiName});
+                    bui.appendChild(bui_name);
+                    ul_bui.appendChild(bui);
+                }
+            }
         }
-        
     }
-    
-    
 }
 </script>
 
