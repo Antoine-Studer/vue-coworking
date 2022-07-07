@@ -22,9 +22,6 @@
 </template>
 
 <script>
-
-
-
 export default {
     name: "CowBuildingsRooms",
     data() {
@@ -87,7 +84,7 @@ export default {
                 
                 let div_check = Object.assign(document.createElement("div"), {classList: "div_check"});
                 for (let opt of opts) {
-                    let check_opt = Object.assign(document.createElement("input"), {type:"checkbox"});
+                    let check_opt = Object.assign(document.createElement("input"), {type:"checkbox", classList:"option-checkbox", id:"option-checkbox-" + opt.row_id});
                     div_check.appendChild(Object.assign(document.createElement("label"), {innerText:opt.cowEliOptId__cowOptOptionName }))
                     div_check.appendChild(check_opt);
                 }
@@ -95,7 +92,7 @@ export default {
                 
                 let button_confirm = Object.assign(document.createElement("button"), {innerText: "Confirm"});
                 button_confirm.addEventListener("click", async function(){
-                    await takeRoom(vm,room, opts, input_date.value, input_b_time.value,input_e_time.value)
+                    await takeRoom(vm,room, opts, input_date.value, convertTime(input_b_time.value),convertTime(input_e_time.value))
                 });
                 div_booking.appendChild(button_confirm);
                 div_rooms.appendChild(div_booking);
@@ -106,14 +103,28 @@ export default {
                 let new_book_row_id = getLastRowId(vm, "CowRoom") + 1;
                 let new_optl_row_id = getLastRowId(vm, "CowOptionsLine") + 1;
                 let booking_number = generateBookingNumber(vm);
+                console.log(b_time);
                 if (parseInt(customer_row) == -1) {
                     window.alert("Please connect to your account to pursue");
                 } 
                 else {
-                    let object_room = await vm.$simplicite.getBusinessObject("CowRoom");
-                    await object_room.create({"row_id":new_book_row_id, "cowBookRoomId": room.row_id, "cowBookCusId": customer_row, "cowBookBookingNumber": booking_number, "cowBookDate": date, "cowBookBeginningTime": b_time, "cowBookEndingTime": e_time});
-                    let object_options_line = await vm.$simplicite.getBusinessObject("CowOptionsLine");
-                    await object_options_line.create({"row_id": new_optl_row_id, "cowOptlEliId": options.row_id, "cowOptlBookId": new_book_row_id});
+                    try {
+                        let object_book = await vm.$simplicite.getBusinessObject("CowBooking");
+                        await object_book.create({"row_id":new_book_row_id, "cowBookRoomId": room.row_id, "cowBookCusId": customer_row,
+                        "cowBookBookingNumber": (await booking_number).toString(), "cowBookDate": date, "cowBookBeginningTime": b_time.toString(), "cowBookEndingTime": e_time.toString(),
+                        });
+                        let object_options_line = await vm.$simplicite.getBusinessObject("CowOptionsLine");
+                        let l_checkbox = document.getElementsByClassName("option-checkbox");
+                        for (let opt of l_checkbox) {
+                            if (opt.checked==true) {
+                                let opt_row_id = opt.id.substring(opt.id.length-1,opt.id.length);
+                                console.log(opt_row_id);
+                                await object_options_line.create({"row_id": new_optl_row_id, "cowOptlEliId": opt_row_id, "cowOptlBookId": new_book_row_id});
+                            }
+                        }
+                    } catch (e) {
+                        window.alert(e.messages);
+                    }
                 }
             }
             let generateBookingNumber = async function(vm) {
@@ -121,24 +132,28 @@ export default {
                 let booking = await vm.$simplicite.getBusinessObject("CowBooking").search();
                 let max = 0;
                 for (let i = 0; i<booking.length; i++){
-                    let num = await booking[i].cowBookNumber;
+                    let num = await booking[i].cowBookBookingNumber;
                     if (num > max) {
                         max = num;
                     }
                 }
                 return max + 1;
             }
-            let getLastRowId = async function(vm, object) {
+            let getLastRowId = async function(vm, obj) {
                 //return the last request row id
-                object = await vm.$simplicite.getBusinessObject(object).search();
+                let object = await vm.$simplicite.getBusinessObject(obj).search();
                 let max = 0;
-                for (var i=0; i<object;i++) {
+                for (var i=0; i<object.length;i++) {
                     var row_id = await object[i].row_id;
                     if (row_id > max) {
                         max = row_id;
                     }
                 }
                 return max;
+            }
+            
+            let convertTime = function(time) {
+                return time + ":00";
             }
 
             main(this);
