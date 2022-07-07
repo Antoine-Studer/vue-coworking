@@ -1,14 +1,18 @@
 <template>
     <div id="infos">
         <p>This is a demo of a coworking space's gestion.</p>
-        <button id="bouton_mes_infos" v-on:click="openInfos()">My informations</button>
+        <p id="connexion"></p><span id="log">Not connected yet</span>
+        <button id="button_my_info" v-on:click="openInfos()">My informations</button>
+
     </div>
 </template>
 
 <script>
 
 
+
 export default {
+    customer_id: 5, 
     methods: {
         openInfos() {
             let main = function(vm) {
@@ -40,12 +44,14 @@ export default {
             let verifLogIn = async function(fname,lname,password, vm) {
                 let custom = vm.$simplicite.getBusinessObject("CowCustomers");
                 let customer = await custom.search({cowCusFirstName: fname, cowCusName: lname, cowCusPassword: password});
+                console.log(customer);
                 if (customer.length==0) {
-                    window.alert("Identifiant ou mot de passe incorrect");
+                    window.alert("Incorrect name or password");
                 }
                 else {
-                    console.log("connecté");
+                    console.log("connected");
                     let custom_id = customer.row_id;
+                    connect(customer[0]);
                     console.log(custom_id);
                 }
 
@@ -98,7 +104,7 @@ export default {
                 let input_bdate = Object.assign(document.createElement("input"), {class:"input-infos", type:"date"})
                 let confirm_name = Object.assign(document.createElement("button"), {innerText:"Create my account"});
                 confirm_name.addEventListener("click", async function(){
-                    await confirmName(input_fname.value,input_lname.value,input_mail.value,input_phone_number.value,input_bdate.value,input_password.value,vm)
+                    await register(input_fname.value,input_lname.value,input_mail.value,input_phone_number.value,input_bdate.value,input_password.value,vm)
                 });
                 let div_inputs = Object.assign(document.createElement("div"), {id:"div_inputs"});
                 div_inputs.appendChild(input_fname);
@@ -111,16 +117,17 @@ export default {
                 div_profil.appendChild(div_inputs);
             }
 
-            let confirmName = async function(fname,lname,mail,phone,date,password,vm) {
+            let register = async function(fname,lname,mail,phone,date,password,vm) {
                 if (lname.length==0 || fname.length==0) {
                         window.alert("Incorrect first name or last name");
                     }
                 else {
                     try {
                     console.log(fname + " " + lname);
-                    var client = await vm.$simplicite.getBusinessObject('CowCustomers');
+                    var object_cus = await vm.$simplicite.getBusinessObject('CowCustomers');
                     let custom_id = await getLastRowId(vm) + 1;
-                    await client.create({"row_id":custom_id,"cowCusName":lname,"cowCusFirstName":fname, "cowCusMail": mail, "cowCusPhoneNumber":phone, "cowCusBirthDate": date, "cowCusPassword": password});
+                    let customer = await object_cus.create({"row_id":custom_id,"cowCusName":lname,"cowCusFirstName":fname, "cowCusMail": mail, "cowCusPhoneNumber":phone, "cowCusBirthDate": date, "cowCusPassword": password});
+                    connect(customer);
                     } catch (error) {
                         try {
                             window.alert(error.messages[0]);
@@ -130,6 +137,13 @@ export default {
                         
                     }
                 } 
+            }
+
+            let connect = function(customer) {
+                let connect = document.getElementById("connexion");
+                connect.innerText = "Connected as: " + customer.cowCusFirstName + " " + customer.cowCusName;
+                let log = document.getElementById("log");
+                log.innerHTML = customer.row_id;
             }
 
             let getLastRowId = async function(vm) {
@@ -158,5 +172,9 @@ export default {
 
 #div_profil {
     border: solid black 1px;
+}
+
+#log {
+    display: none;
 }
 </style>
