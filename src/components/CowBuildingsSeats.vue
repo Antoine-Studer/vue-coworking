@@ -1,7 +1,8 @@
 <template>
 <div id="main_building_seat">
     <div id="div_building_seat">
-        <h1>Buildings</h1>
+        <h1>Get a seat</h1>
+        <h2>Buildings</h2>
         <p v-if="buildings.length==0">Loading...</p> 
         <ul id="liste_buildings" v-else>
             <li v-for="building of buildings" v-bind:key="'building-' + building.row_id" classList="building" v-on:click="reqSeat(building.row_id)">
@@ -20,7 +21,7 @@
         </ul>
     </div>
     <div id="seats">
-        
+        <h2>Select Seat</h2>
     </div>
 </div>  
 </template>
@@ -47,44 +48,69 @@ export default {
     methods: { 
         async reqSeat(bui_row_id) {
             let main = async function(vm) {
-                parseSeats(vm);
-            }
-            let parseSeats = async function(vm) {
                 let to_hide = document.getElementById("div_building_seat");
                 to_hide.style.display = "none";
+                let div_main = document.getElementById("seats");
+                div_main.style.display = "inline-block";
+                let b_public = Object.assign(document.createElement("button"), {innerText: "public", id:"b_public"});
+                let b_private =Object.assign(document.createElement("button"), {innerText: "private", id:"b_private"});
+                b_public.addEventListener('click', async function(){scrapeSeats(vm,"PUBLIC")});
+                b_private.addEventListener("click", async function(){scrapeSeats(vm,"PRIVATE")});
+                div_main.appendChild(b_public);
+                div_main.appendChild(b_private);
+            }
+
+
+            let scrapeSeats = async function(vm, status) {
+                //scrape the seats from simplicite
+                let div_main = document.getElementById("seats");
+                let l_seats = div_main.querySelectorAll(".div_seat");
+                for (let seat of l_seats) {
+                    div_main.removeChild(seat);
+                }
 
                 let seats = await vm.$simplicite.getBusinessObject("CowWorkspace").search({cowWorBuiId: bui_row_id});
-                console.log(seats);
-                let div_main = document.getElementById("seats");
-                let div_public = Object.assign(document.createElement("div"), {classList:"div_public_seats div_seats"});
-                let div_private = Object.assign(document.createElement("div"), {classList:"div_private_seats div_seats"});
+                
                 
                 for (let seat of seats) {
-                    let div_seat = Object.assign(document.createElement("div"), {classList: "div_seat"});
-                    let num_seat = Object.assign(document.createElement("button"), {innerHTML: seat.cowWorSeatNumber});
-                    num_seat.addEventListener("click", async function() {
-                        await takeSeat(vm, seat.row_id);
-                    })
-                    div_seat.appendChild(num_seat);
-                    if (seat.cowWorStatus == "PUBLIC") {
-                        div_public.appendChild(div_seat);
-                    }
-                    else {
-                        div_private.appendChild(div_seat);
+                    if (seat.cowWorStatus == status) {
+                        let div_seat = Object.assign(document.createElement("div"), {classList: "div_seat"});
+                        let num_seat = Object.assign(document.createElement("h5"), {innerHTML: seat.cowWorSeatNumber});
+                        let availability = seat.cowWorAvailability;
+                        let avai_seat = Object.assign(document.createElement("p"));
+                        if (availability == true) {
+                            avai_seat.innerText = "Available";
+                        }
+                        else {
+                            avai_seat.innerText = "Not available";
+                        }
+                        div_seat.addEventListener("click", async function() {
+                            await takeSeat(vm, seat.row_id, status);
+                        })
+                        div_seat.appendChild(num_seat);
+                        div_seat.appendChild(avai_seat);
+                        div_main.appendChild(div_seat);
                     }
                 }
-                div_main.appendChild(div_public);
-                div_main.appendChild(div_private);
+                
             }
-            let takeSeat = async function(vm, row_id) {
+            let takeSeat = async function(vm, row_id, status) {
+                //create a new request of seat from the connected customer
                 let req = await vm.$simplicite.getBusinessObject("CowRequest");
                 let custom_row = await getLastRowId(vm, "CowRequest");
                 let customer_row = document.getElementById("log").innerHTML;
-                console.log(customer_row);
-                try {
-                    await req.create({"row_id": custom_row,"cowReqWorId": row_id, "cowReqCusId": customer_row});
-                } catch (e) {
-                    window.alert("Please connect to your account to puruse");
+                if (parseInt(customer_row) == -1) {
+                    window.alert("Please connect to your account to pursue");
+                }
+                else {
+                    try {
+                        if (confirm("Do you want to request this seat ?")) {
+                            await req.create({"row_id": custom_row,"cowReqWorId": row_id, "cowReqCusId": customer_row});
+                            window.alert(status + " seat " + row_id + " requested");
+                        }
+                    } catch (e) {
+                        window.alert(e.messages);
+                    }
                 }
             }
             let getLastRowId = async function(vm, object) {
@@ -103,35 +129,14 @@ export default {
             main(this);
         },
 
-        async focusBuilding(row_id) {
-            //get the rooms of the building
-            const vm = this
-            let div_bui = document.getElementById("div-building-" + row_id);
-            let div_workspace = Object.assign(document.createElement("div"), {classList:"div_workspace"});
-            vm.workspace = await vm.$simplicite.getBusinessObject("CowWorkspace").search({cowWorBuiId: row_id});
-            for (var i=0; i<vm.workspace.length; i++) {
-                let workspace = Object.assign(document.createElement('div'), {classList:"workspace"});
-                let num_workspace = Object.assign(document.createElement("p"), {innerText:vm.workspace[i].cowWorSeatNumber + " : " + vm.workspace[i].cowWorStatus});
-                workspace.appendChild(num_workspace);
-                div_workspace.appendChild(workspace)
-            }
-            div_bui.appendChild(div_workspace);
-        },
         
-        async seePrivate(row_id) {
-            return row_id;
-            /*const vm = this;
-            vm.seats = await vm.$simplicite.getBusinessObject("CowWorkspace").search({cowWorBuiId: row_id, cowWorStatus: "PRIVATE", cowWorAvailability: true});
-            let div_bui = document.getElementById("div-building-" + row_id);
-            div_bui.appendChild(seats);*/
-        }
-        /*async searchBuilding() {
+        /**async searchBuilding() {
             const vm = this;
             let ul_bui = document.getElementById("liste_buildings");
-            let l_buildings = document.getElementsByClassName("building");
             let input = document.getElementById("search");
+            let l_buildings = ul_bui.querySelectorAll(".building");
             for(let building of l_buildings) {
-                ul_bui.removeChild(building);
+                building.style.display = "none";
             }
             vm.buildings = await vm.$simplicite.getBusinessObject("CowBuilding").search();
 
@@ -153,6 +158,10 @@ export default {
     display: none;
 }
 
+#seats {
+    display: none;
+}
+
 ul {
   list-style-type:none;
   margin: 0;
@@ -170,13 +179,14 @@ ul {
     border-radius: 15px;
     color: black;
 }
-.div_seats {
+.div_seat {
     border: solid black 1px;
     margin: 2px;
     padding: 2px;
     display: inline-block;
     vertical-align: top;
-    background-color: blue;
+    background-color: white;
+    color: black;
     width: 40%;
 }
 

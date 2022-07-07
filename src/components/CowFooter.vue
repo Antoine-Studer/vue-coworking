@@ -6,7 +6,9 @@
 </template>
 
 <style scoped>
+
 footer {
   font-size: small;
+
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <header>
-        <h1>Coworking Space</h1>
+        <h1>OUIWORK</h1>
         
     </header>   
 </template>

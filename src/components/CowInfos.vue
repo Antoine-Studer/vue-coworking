@@ -1,7 +1,7 @@
 <template>
     <div id="infos">
         <p>This is a demo of a coworking space's gestion.</p>
-        <p id="connexion"></p><span id="log">Not connected yet</span>
+        <p id="connexion"></p><span id="log">-1</span>
         <button id="button_my_info" v-on:click="openInfos()">My informations</button>
 
     </div>
@@ -12,7 +12,6 @@
 
 
 export default {
-    customer_id: 5, 
     methods: {
         openInfos() {
             let main = function(vm) {
@@ -144,6 +143,12 @@ export default {
                 connect.innerText = "Connected as: " + customer.cowCusFirstName + " " + customer.cowCusName;
                 let log = document.getElementById("log");
                 log.innerHTML = customer.row_id;
+                try {
+                    document.getElementById("div_log_in").style.display = "none";
+                    document.getElementById("div_inputs").style.display = "none";
+                } catch(e) {
+                    null;
+                }
             }
 
             let getLastRowId = async function(vm) {
