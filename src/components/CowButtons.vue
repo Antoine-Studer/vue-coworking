@@ -50,7 +50,9 @@ export default {
 
 <style>
 .order{
-    width: 80%;
-    height: 10%;
+    width: 40%;
+    height: 50px;
+    border-radius: 8px;
+    margin: 5px;
 }
 </style>

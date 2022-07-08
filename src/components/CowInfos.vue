@@ -1,7 +1,7 @@
 <template>
     <div id="infos">
         <p>This is a demo of a coworking space's gestion.</p>
-        <p id="connexion"></p><span id="log">-1</span>
+        <p id="connexion">Connected as Alain Delon</p><span id="log">5</span>
         <button id="button_my_info" v-on:click="openInfos()">My informations</button>
 
     </div>
@@ -10,21 +10,135 @@
 <script>
 
 
-
 export default {
     methods: {
         openInfos() {
             let main = function(vm) {
-                console.log(vm);
-                let infos = document.getElementById("infos");
-                let div_profil = Object.assign(document.createElement("div"), {id: "div_profil"});
-                let button_profil = Object.assign(document.createElement("button"), {innerText: "My profile"});
-                button_profil.addEventListener("click",function() {
-
+                let profil = document.getElementById("div_profil");
+                if (profil == undefined) {
+                    let infos = document.getElementById("infos");
+                    let div_profil = Object.assign(document.createElement("div"), {id: "div_profil"});
+                    let button_my_bookings = Object.assign(document.createElement("button"), {id:"button_my_bookings", innerText:"My Bookings"});
+                    button_my_bookings.addEventListener("click", function(){buttonsBooking(vm,div_profil)});
                     loginRegister(vm, div_profil);
-                });
-                div_profil.appendChild(button_profil);
-                infos.appendChild(div_profil);
+                    div_profil.appendChild(button_my_bookings);
+                    infos.appendChild(div_profil);
+                }
+                else if (profil.style.display == "none") {
+                    profil.style.display = "inline-block";
+                }
+                else {
+                    profil.style.display = "none";
+                }
+            }
+
+            let buttonsBooking = function(vm,div_profil) {
+                if (document.getElementById("see-bookings") == undefined) {
+                    let see_bookings = Object.assign(document.createElement("div"), {id:"see-bookings"});
+                    let button_old = Object.assign(document.createElement("button"), {innerText:"Previous bookings"});
+                    let button_to_come = Object.assign(document.createElement("button"), {innerText:"To come"});
+                    button_old.addEventListener("click",async function(){await seeBookings(vm,see_bookings,true)});
+                    button_to_come.addEventListener("click", async function(){await seeBookings(vm,see_bookings,false)});
+                    see_bookings.appendChild(button_old);
+                    see_bookings.appendChild(button_to_come);
+                    div_profil.appendChild(see_bookings);
+                }
+            }
+
+            let seeBookings = async function(vm,div, is_old) {
+                let l_bookings_check = div.querySelectorAll(".div_booking_check");
+                for (let bookings_check of l_bookings_check) {
+                    div.removeChild(bookings_check);
+                }
+                let customer_row = document.getElementById("log").innerHTML;
+                if (parseInt(customer_row ) == -1) {
+                    window.alert("please connect to your account to check you bookings")
+                }
+                else {
+                    let count_old = 0;
+                    let count_coming = 0;
+                    try {
+                        let bookings = await vm.$simplicite.getBusinessObject("CowBooking").search({cowBookCusId: customer_row});
+                        for (let booking of bookings) {
+                            if (is_old) {
+                                if (isOld(booking.cowBookDate)) {
+                                    count_old++;
+                                    let div_booking = Object.assign(document.createElement("div"), {classList:"div_booking_check"});
+                                    let booking_number = Object.assign(document.createElement("p"), {innerText:booking.cowBookBookingNumber.toString()});
+                                    let booking_date = Object.assign(document.createElement("p"), {innerText: booking.cowBookDate});
+                                    div_booking.appendChild(booking_number);
+                                    div_booking.appendChild(booking_date);
+                                    div.appendChild(div_booking);
+                                }
+                            }
+                            else {
+                                if (!isOld(booking.cowBookDate)) {
+                                    count_coming++;
+                                    let div_booking = Object.assign(document.createElement("div"), {classList:"div_booking_check"});
+                                    let booking_number = Object.assign(document.createElement("p"), {innerText:booking.cowBookBookingNumber.toString()});
+                                    let booking_date = Object.assign(document.createElement("p"), {innerText: booking.cowBookDate});
+                                    div_booking.appendChild(booking_number);
+                                    div_booking.appendChild(booking_date);
+                                    div.appendChild(div_booking);
+                                }
+                                
+                            }
+                        }
+                    } catch(e) {
+                        window.alert(e.messages);
+                    }
+                    let no_previous = document.getElementById("no-previous");
+                    let no_upcoming = document.getElementById("no-upcoming");
+                    if (is_old) {
+                        if (no_upcoming != null) {
+                            no_upcoming.style.display = "none";
+                        }
+                        if (count_old==0) {
+                            if (no_previous == undefined) {
+                                div.appendChild(Object.assign(document.createElement("p"), {innerHTML:"No Previous booking", id:"no-previous"}));
+                            }
+                            else if (no_previous.style.display == "none") {
+                                no_previous.style.display = "inline";
+                            }
+                            else {
+                                no_previous.style.display = "none";
+                            }
+                            }
+                    }
+                    else {
+                        console.log(no_previous);
+                        if (no_previous != null) {
+                            no_previous.style.display == "none";
+                        }
+                        if (count_coming==0) {
+                            div.appendChild(Object.assign(document.createElement("p"), {innerHTML:"No upcoming booking", id:"no-upcoming"}));
+
+                        }
+                    }
+                }
+            }
+           
+            let isOld = function(date) {
+                //returns true the date is anterior to the current date
+                let today = new Date();
+                let year = parseInt(date.substring(0,4));
+                let month = parseInt(date.substring(5,7));
+                let day = parseInt(date.substring(8,10));
+                let res = true;
+                if (year > today.getFullYear()) {
+                    res = false;
+                }
+                else if (year == today.getFullYear()) {
+                    if (month > today.getMonth() + 1) {
+                        res = false;
+                    }
+                    else if(month == today.getMonth() + 1) {
+                        if (day > today.getDate()) {
+                            res = false;
+                        }
+                    }
+                }
+                return res;
             }
 
             let loginRegister = function(vm,div_profil) {
@@ -67,6 +181,14 @@ export default {
                     } catch(e) {
                         null;
                     }
+                }
+                try {
+                    let l_booking_check = div_profil.querySelectorAll(".div_booking_check");
+                    for (let ele in l_booking_check) {
+                        div_profil.removeChild(ele)
+                    }
+                }catch(e) {
+                    null;
                 }
             }
 
@@ -173,6 +295,15 @@ export default {
 <style>
 .infos-customer {
     width: 100px;
+}
+.div_booking_check {
+    background-color: white;
+    color: black;
+    border: black 1px solid;
+    border-radius: 10px;
+    width: 80%;
+    display: inline-block;
+    vertical-align: top;
 }
 
 #div_profil {
