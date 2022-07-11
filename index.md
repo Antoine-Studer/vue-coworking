@@ -25,3 +25,15 @@ The data model consists of 9 business objects:
   <li>Options which are only linked to eligible options </li>
   <li>Options line which designate the options found in a booking for the room which has eligible options </li>
   <li>Bookings which are linked to one customer, one room and have options</li>
+
+  <h2>User profiles</h2>
+  
+  The <strong>Administator</strong> profile is a back office profile. He has full acces to all the application. He can manage all data and he's the only one reponsible of the confirmations of requests or bookings.
+  
+  The <strong>Plain user</strong> is also a back office profile. He has read only access to reference data like buildings or rooms and has the write access on his own orders and requests, which includes options lines.
+  
+  The <strong>Customer</strong> is a front office profile. He has only access to dedicated custom user interfarces. He is only allowed to requests seats, book a room or see his informations and cancel his bookings or workspace places.
+  
+  <h2>Business workflows</h2>
+    
+    <h3>Booking states</h3>
