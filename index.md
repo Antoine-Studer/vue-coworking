@@ -25,7 +25,7 @@ The data model consists of 9 business objects:
   <li>Options which are only linked to eligible options </li>
   <li>Options line which designate the options found in a booking for the room which has eligible options </li>
   <li>Bookings which are linked to one customer, one room and have options</li>
-
+</ul>
   <h2>User profiles</h2>
   
   The <strong>Administator</strong> profile is a back office profile. He has full acces to all the application. He can manage all data and he's the only one reponsible of the confirmations of requests or bookings.
@@ -38,7 +38,12 @@ The data model consists of 9 business objects:
     
 <h3>Booking states</h3>
   <img src="./bookingstate.png"/>
-
+  COW_GROUP designates the administrator while COW_USER designates the user.
+Bookings can be in following statuses: 
+  <ul>
+  <li><strong>Pending</strong> as the initial status
+  <li><strong>Confirmed</strong> when confirmed by the administrator
+  <li><strong>Cancelled</strong> if cancelled 
   
-  <h3>Request states</h3>
+<h3>Request states</h3>
   <img src="./requestsate.png"/>
