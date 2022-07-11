@@ -47,3 +47,49 @@ Bookings can be in following statuses:
   
 <h3>Request states</h3>
   <img src="./requestsate.png"/>
+Same designations than for Booking states.
+    
+Requests cans be in following statuses:
+<ul>
+  <li><strong>Waitlist</strong> as the initial status</li>
+  <li><strong>Accepted</strong> when accepted by the administrator</li>
+  <li><strong>Refused</strong> if the administrator refuses the request or the customer resiliates his place</li>
+
+  <h2>Business rules</h2>
+  <h3>Buildings related business rules</h3>
+  Building can only be created and updated by the administrator profile.
+  
+  <h3>Workspace related business rules</h3>
+  Workspace can only be created by the administrator profile.
+  
+  <h3>Request related business rules</h3>
+  Requests can be created updated or deleted by both the admnistator profile and the user profile.
+  
+  <h3>Customers related business rules</h3>
+  A customer can be created by both the admnistrator and user profile but can only be updated by the administrator profile (except the pass word which can be updated by both).
+  
+  <h3>Booking related business rules</h3>
+  A booking have multiples business rules:
+  <ul>
+    <li>The booking date must be after the current date or the booking time must be after the current time (only if the date is the current date).</li>
+    <li>The booking has a beginning and an ending which cannot be before the building time or after the building closing time.</li>
+    <li>A booking cannot be modified by the user if it is already confirmed</li>
+  </ul>
+  
+  <h3>Option Line related business rules</h3>
+  Each booking can have multiples options line, but each of them must refer only to an eligible option from the booking's room.
+  
+  <h3>Eligible option related business rules</h3>
+  An eligible option is one option eligible for one room.
+  It is placed by an administrator profile.
+  
+  <h3>Options related business rules </h3>
+  An option is created by an admnistrator profile. It is eligible multiple times.
+  
+  <h3>Room related business rules</h3>
+  A room is created by an administrator profile.
+  A room is in one building. Each room has a number which is unique per building.
+  Multiple bookings can be placed on one room, but not in the same time.
+  
+    
+  
