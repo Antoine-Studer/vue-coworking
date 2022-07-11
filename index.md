@@ -41,4 +41,4 @@ The data model consists of 9 business objects:
 
   
   <h3>Request states</h3>
-  <img src="./requeststate.png"/>
+  <img src="./requestsate.png"/>
