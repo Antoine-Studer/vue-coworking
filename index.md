@@ -37,3 +37,8 @@ The data model consists of 9 business objects:
 <h2>Business workflows</h2>
     
 <h3>Booking states</h3>
+  <img src="./bookingstate.png"/>
+
+  
+  <h3>Request states</h3>
+  <img src="./requeststate.png"/>
