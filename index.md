@@ -12,4 +12,4 @@ The 2 back office business user profiles are administrator and plain user. Admin
 
 <h2>Business data </h2>
 
-<img src="./diagram.png"/>
+<img src="./ModelCoworking.png"/>
