@@ -11,3 +11,5 @@ Some business rules, including right rules, applies on all business objects some
 The 2 back office business user profiles are administrator and plain user. Administrators manages all reference data, enters and/or validate requests and bookings. Plain users are only responsible for booking rooms or requesting seats.
 
 <h2>Business data </h2>
+
+<img src="./diagram.png"/>
