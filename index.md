@@ -34,6 +34,6 @@ The data model consists of 9 business objects:
   
   The <strong>Customer</strong> is a front office profile. He has only access to dedicated custom user interfarces. He is only allowed to requests seats, book a room or see his informations and cancel his bookings or workspace places.
   
-  <h2>Business workflows</h2>
+<h2>Business workflows</h2>
     
-    <h3>Booking states</h3>
+<h3>Booking states</h3>
