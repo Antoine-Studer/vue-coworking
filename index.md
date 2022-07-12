@@ -95,7 +95,7 @@ Requests cans be in following statuses:
   
   As said earlier, this application has a front end destined to the customer. This front-end is designed for phone usage.
   This front allow the user to connect himself or to register a new account.
-  He then can consult his bookings, previous or to come and can cancel the bookings to come.
+  He then can consult his bookings, previous or to come and can cancel the bookings to come as well as his seat requests.
   
   There is two buttons, "Get a seat" and "Get a room". They are self-explainatory. When you click on one of them, the buildings appear and you can choose and search the one you're looking for. You then can proceed to select your room or your seat and make the request or the booking.
   
