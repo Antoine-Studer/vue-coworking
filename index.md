@@ -91,7 +91,7 @@ Requests cans be in following statuses:
   A room is in one building. Each room has a number which is unique per building.
   Multiple bookings can be placed on one room, but not in the same time.
   
-  <h1>Font end</h1>
+  <h1>Front end</h1>
   
   As said earlier, this application has a front end destined to the customer. This front-end is designed for phone usage.
   This front allow the user to connect himself or to register a new account.
