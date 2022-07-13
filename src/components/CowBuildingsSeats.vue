@@ -3,15 +3,16 @@
     <div id="div_building_seat">
         <h1>Get a seat</h1>
         <h2>Buildings</h2>
+        <input placeholder="Search building" id="search_buildings_seat" v-on:keyup="searchBuilding()"/>
         <p v-if="buildings.length==0">Loading...</p> 
-        <ul id="liste_buildings" v-else>
+        <ul id="list_buildings_seat" v-else>
             <li v-for="building of buildings" v-bind:key="'building-' + building.row_id" classList="building" v-on:click="reqSeat(building.row_id)">
             
                 <div v-bind:id="'div-building-' + building.row_id" >
-                    <h3>{{building.cowBuiName}}</h3>
-                    <p>{{building.cowBuiAdress}}</p>
-                    <p>Opening Time: <time>{{building.cowBuiOpeningTime}}</time></p>
-                    <p>Closing Time: <time>{{building.cowBuiClosingTime}}</time></p>
+                    <h3 classList="building_name">{{building.cowBuiName}}</h3>
+                    <p classList="building_adress">{{building.cowBuiAdress}}</p>
+                    <p classList="building_opening_time building_time">Opening Time: <time>{{building.cowBuiOpeningTime}}</time></p>
+                    <p classList="building_closing_time building_time">Closing Time: <time>{{building.cowBuiClosingTime}}</time></p>
                     <div classList="type">
                         <p v-if="building.public  == undefined">No public seats available</p><p v-else> public seats available: {{building.public.length}}</p>
                         <p v-if="building.private  == undefined">No private seats available</p><p v-else>private seats available: {{building.private.length}} </p>
@@ -20,9 +21,7 @@
             </li>
         </ul>
     </div>
-    <div id="seats">
-        <h2>Select Seat</h2>
-    </div>
+    <div id="seats"></div>
 </div>  
 </template>
 
@@ -50,10 +49,19 @@ export default {
             let main = async function(vm) {
                 let to_hide = document.getElementById("div_building_seat");
                 to_hide.style.display = "none";
-                let div_main = document.getElementById("seats");
-                div_main.style.display = "inline-block";
+                let div_main = Object.assign(document.createElement("div"), {id:"seats"});
+                document.getElementById("main_building_seat").appendChild(div_main);
+                if (div_main.querySelector("button") != undefined) {
+                    for (let ele of div_main.querySelectorAll("button")) {
+                        div_main.removeChild(ele);
+                    } 
+                    for (let seat of div_main.querySelectorAll(".div_seat"))  {
+                        div_main.removeChild(seat);
+                    } 
+                }
                 let b_public = Object.assign(document.createElement("button"), {innerText: "public", id:"b_public"});
                 let b_private =Object.assign(document.createElement("button"), {innerText: "private", id:"b_private"});
+                document.getElementById("seats").style.display = "inline-block";
                 b_public.addEventListener('click', async function(){scrapeSeats(vm,"PUBLIC")});
                 b_private.addEventListener("click", async function(){scrapeSeats(vm,"PRIVATE")});
                 div_main.appendChild(b_public);
@@ -98,7 +106,7 @@ export default {
                 //create a new request of seat from the connected customer
                 let req = await vm.$simplicite.getBusinessObject("CowRequest");
                 let custom_row = await getLastRowId(vm, "CowRequest");
-                let customer_row = document.getElementById("log").innerHTML;
+                let customer_row = document.getElementById("log").value;
                 if (parseInt(customer_row) == -1) {
                     window.alert("Please connect to your account to pursue");
                 }
@@ -130,25 +138,22 @@ export default {
         },
 
         
-        /**async searchBuilding() {
-            const vm = this;
-            let ul_bui = document.getElementById("liste_buildings");
-            let input = document.getElementById("search");
+        async searchBuilding() {
+            let ul_bui = document.getElementById("list_buildings_seat");
+            let input = document.getElementById("search_buildings_seat");
             let l_buildings = ul_bui.querySelectorAll(".building");
             for(let building of l_buildings) {
-                building.style.display = "none";
-            }
-            vm.buildings = await vm.$simplicite.getBusinessObject("CowBuilding").search();
-
-            for (var j = 0; j<vm.buildings.length; j++) {
-                if (((vm.buildings[j].cowBuiName).substring(0,input.value.length)).toLowerCase() == input.value.toLowerCase()) {
-                    let bui = Object.assign(document.createElement("li"), {classList:"building"});
-                    let bui_name = Object.assign(document.createElement("h3"), {innerText:vm.buildings[j].cowBuiName});
-                    bui.appendChild(bui_name);
-                    ul_bui.appendChild(bui);
+                let name = building.querySelector(".building_name").innerHTML.toLowerCase();
+                let adress = building.querySelector(".building_adress").innerHTML.toLowerCase();
+                if (name.includes(input.value.toLowerCase()) || adress.includes(input.value.toLowerCase())) {
+                    building.style.display = "inline-block";
+                }
+                else {
+                    building.style.display = "none";
                 }
             }
-        }*/
+            
+        }
     }
 }
 </script>

@@ -16,14 +16,10 @@ export default {
             let bui_room = document.getElementById("div_building_room");
             bui_room.style.display = "none";
             bui_seat.style.display = "inline-block";
-
-            let div_rooms = document.getElementById("rooms");
-            div_rooms.style.display = "none";
-            let l_rooms = div_rooms.querySelectorAll(".div_room");
-            
-            for (let room of l_rooms) {
-                div_rooms.removeChild(room);
+            if (document.getElementById("seats") != undefined) {
+                document.getElementById("main_building_seat").removeChild(document.getElementById("seats"));
             }
+            
         },
         getRoom() {
 
@@ -32,16 +28,24 @@ export default {
             bui_seat.style.display = "none";
             bui_room.style.display = "inline-block";
 
+
             let div_seats = document.getElementById("seats");
-            div_seats.style.display = "none";
+            if (div_seats != null) {
+                div_seats.style.display = "none";
+
+            }
+            
+            
             if (document.getElementById("b_public") != undefined) {
                 div_seats.removeChild(document.getElementById("b_public"));
                 div_seats.removeChild(document.getElementById("b_private"));
             }
-            let l_seats = div_seats.querySelectorAll(".div_seat");
-            for (let seat of l_seats) {
-                div_seats.removeChild(seat);
+            let div_rooms = document.getElementById("rooms");
+            if (document.getElementById("div_booking") != undefined) {
+                div_rooms.removeChild(document.getElementById("div_booking"));
+
             }
+            div_rooms.style.display = "none";
         },
     }
 }
