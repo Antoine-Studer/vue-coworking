@@ -36,7 +36,8 @@ The data model consists of 9 business objects:
     
 <h3>Booking states</h3>
   <img src="./bookingstate.png"/>
-  COW_GROUP designates the administrator while COW_USER designates the user.
+  
+COW_GROUP designates the administrator while COW_USER designates the user.
 Bookings can be in following statuses: 
   <ul>
   <li><strong>Pending</strong> as the initial status
@@ -45,9 +46,10 @@ Bookings can be in following statuses:
   
 <h3>Request states</h3>
   <img src="./requestsate.png"/>
+    
 Same designations than for Booking states.
     
-Requests cans be in following statuses:
+Requests can be in following statuses:
 <ul>
   <li><strong>Waitlist</strong> as the initial status</li>
   <li><strong>Accepted</strong> when accepted by the administrator</li>
