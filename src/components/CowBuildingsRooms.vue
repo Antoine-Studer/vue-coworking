@@ -24,6 +24,7 @@
 
 <script>
 export default {
+    // scrape and display the buildings and rooms
     name: "CowBuildingsRooms",
     data() {
         return {buildings: []};

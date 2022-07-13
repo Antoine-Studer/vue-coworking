@@ -29,6 +29,7 @@
 <script>
 
 export default {
+    //scrape and display the buildings and seats
     name: "CowBuildingSeats",
     data() {
         return {buildings: []};

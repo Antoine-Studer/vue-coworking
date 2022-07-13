@@ -11,6 +11,7 @@
 
 
 export default {
+    //All the customer's info: Log In, Register, Bookings, Seats 
     methods: {
         openInfos() {
             let main = function(vm) {

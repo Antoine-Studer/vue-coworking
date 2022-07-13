@@ -8,6 +8,7 @@
 <script>
 
 export default {
+    // Buttons take a seat and button take a room
     name: "CowButtons",
     methods: {
         getSeat() {
