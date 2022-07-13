@@ -12,7 +12,7 @@ The 2 back office business user profiles are administrator and plain user. Admin
 
 <h2>Business data </h2>
 
-<img src="./ModelCoworking.png"/>
+<img src="./CowworkingModel.png"/>
 
 The data model consists of 9 business objects: 
 <ul>
