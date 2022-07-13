@@ -66,7 +66,7 @@ Requests can be in following statuses:
   Requests can be created updated or deleted by both the admnistator profile and the user profile.
   
   <h3>Customers related business rules</h3>
-  A customer can be created by both the admnistrator and user profile but can only be updated by the administrator profile (except the pass word which can be updated by both).
+  A customer can be created by both the administrator and user profile but can only be updated by the administrator profile (except the password which can be updated by both).
   
   <h3>Booking related business rules</h3>
   A booking have multiples business rules:
@@ -95,7 +95,7 @@ Requests can be in following statuses:
   
   As said earlier, this application has a front end destined to the customer. This front-end is designed for phone usage.
   This front allow the user to connect himself or to register a new account.
-  He then can consult his bookings, previous or to come and can cancel the bookings to come as well as his seat requests.
+  He then can consult his bookings, previous or to come and can cancel or modify the bookings to come as well as his seat requests.
   
-  There is two buttons, "Get a seat" and "Get a room". They are self-explainatory. When you click on one of them, the buildings appear and you can choose and search the one you're looking for. You then can proceed to select your room or your seat and make the request or the booking.
+  There is two buttons, "Get a seat" and "Get a room". They are self-explainatory. When you click on one of them, the buildings appear and you can choose and search the one you're looking for. You then can proceed to select your room or your seat by capacity and make the request or the booking.
   
