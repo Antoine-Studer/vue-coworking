@@ -19,7 +19,7 @@ export default {
                     let infos = document.getElementById("infos");
                     let div_profil = Object.assign(document.createElement("div"), {id: "div_profil"});
                     let button_my_bookings = Object.assign(document.createElement("button"), {id:"button_my_bookings", innerHTML:"My Bookings"});
-                    let button_my_seats = Object.assign(document.createElement("button"), {id:"button_my_seats", innerHTML:"My Requests"});
+                    let button_my_seats = Object.assign(document.createElement("button"), {id:"button_my_seats", innerHTML:"My Seats"});
                     button_my_seats.addEventListener("click", async function(){await buttonsSeats(vm,div_profil)});
                     button_my_bookings.addEventListener("click", function(){buttonsBooking(vm,div_profil)});
                     loginRegister(vm, div_profil);
@@ -70,7 +70,7 @@ export default {
                             let status_seat = Object.assign(document.createElement("p"), {innerHTML:seat.cowReqWorId__cowWorStatus});
                             let building_seat = Object.assign(document.createElement("p"), {innerHTML:seat.cowReqWorId__cowWorBuiId__cowBuiName, classList:"name_building_seat"});
                             let button_cancel = Object.assign(document.createElement("button"), {innerHTML:"Cancel seat subscription"});
-                            button_cancel.addEventListener("click", async function() { await cancelRequest(vm,seat.cowReqWorId, seat.cowReqCusId, true)});
+                            button_cancel.addEventListener("click", async function() { await cancelRequest(vm,seat.cowReqWorId, seat.cowReqCusId, true, div_seat,div_my_req)});
                             div_seat.appendChild(num_seat);
                             div_seat.appendChild(status_seat);
                             div_seat.appendChild(building_seat);
@@ -111,7 +111,7 @@ export default {
     
                             let status_req = Object.assign(document.createElement("p"), {innerHTML:seat.cowReqStatus});
                             let button_cancel = Object.assign(document.createElement("button"), {innerHTML:"Cancel request"});
-                            button_cancel.addEventListener("click", async function() { await cancelRequest(vm,seat.cowReqWorId, seat.cowReqCusId, false)});
+                            button_cancel.addEventListener("click", async function() { await cancelRequest(vm,seat.cowReqWorId, seat.cowReqCusId, false, div_seat,div_my_req)});
                             div_seat.appendChild(num_seat);
                             div_seat.appendChild(seat_building);
                             div_seat.appendChild(status_req);
@@ -126,7 +126,7 @@ export default {
                     }
                 }
             }
-            let cancelRequest = async function(vm, wor_row_id, cus_row_id, is_accepted) {
+            let cancelRequest = async function(vm, wor_row_id, cus_row_id, is_accepted,div_to_delete,parent_div) {
                 let res =""
                 if (is_accepted) {
                     res = "Do you want to cancel your subscription?"
@@ -140,6 +140,7 @@ export default {
                         let req = await obj_req.search({"cowReqWorId": wor_row_id, "cowReqCusId":cus_row_id});
                         await obj_req.del(req[0]);
                         window.alert("request cancelled");
+                        parent_div.removeChild(div_to_delete);
     
                     } catch (e) {
                         window.alert(e.message);
@@ -364,8 +365,8 @@ export default {
             }
 
             let loginRegister = function(vm,div_profil) {
-                let login = Object.assign(document.createElement("button"), {classList:"login-button",innerText:"login", id:"button_log_in"});
-                let register = Object.assign(document.createElement("button"), {classList:"login-button", innerText:"register", id:"button_register"});
+                let login = Object.assign(document.createElement("button"), {classList:"login-button",innerText:"Login", id:"button_log_in"});
+                let register = Object.assign(document.createElement("button"), {classList:"login-button", innerText:"Register", id:"button_register"});
                 login.addEventListener("click",function(){
                     logIn(vm,div_profil);
                 });

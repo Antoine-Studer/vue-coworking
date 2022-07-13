@@ -109,6 +109,9 @@ export default {
                 if (document.getElementById("div_booking") != undefined) {
                     div_rooms.removeChild(document.getElementById("div_booking"));
                 }
+                if (document.getElementById("input-desired-capacity") != undefined) {
+                    div_rooms.removeChild(document.getElementById("input-desired-capacity"));
+                }
                 
                 let div_booking = Object.assign(document.createElement("div"), {id: "div_booking"});
                 let num_room = Object.assign(document.createElement("p"), {classList: "room_number", innerHTML: room.cowRoomNumber});
